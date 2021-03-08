@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<div th:fragment="searchFragment">
+	<form th:action="@{/goodsList}" method="get">
+		<select name="searchKey">
+			<option value="goodsName">상품이름</option>
+			<option value="memberId">판매자아이디</option>
+			<option value="memberName">판매자이름</option>
+			<option value="memberEmail">판매자이메일</option>
+		</select>
+		<input type="text" name="searchValue">
+		<button type="submit">검색버튼</button> 	
+	</form>
+
+</div>
+</html>

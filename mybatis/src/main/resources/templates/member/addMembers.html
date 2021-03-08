@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="@{layout/default}">
+
+<th:block layout:fragment="customJs">
+	<script type="text/javascript" th:src="@{js/member.js}"></script>
+</th:block>
+
+<th:block layout:fragment="customContents">
+	<style>
+		#addMemberBody tr{
+			text-align: center;
+		}
+		#addMemberBody input{
+			width:95%;
+		}
+		#trCount{
+			width:50px;
+		}
+		div > button{
+			margin-left: 10px;
+		}
+	</style>
+	<div style="width: 650px; padding-bottom: 10px;">	
+		<input type="number" id="trCount" min="0" value="0"/>
+		<button id="addRows">다중행추가</button>
+		<button id="removeRows">선택삭제</button>
+		<button id="addMembers" style="float: right;">다중등록</button>
+		<button id="addCheckedMembers" style="float: right; ">선택등록</button>
+	</div>
+	<form id="addMemberForm" method="post" th:action="@{/addMembers}">
+		<table border="1" style="width: 650px;">
+			<thead>
+				<tr>
+					<th style="width:3%;">구분</th>
+					<th style="width:10%;">아이디</th>
+					<th style="width:10%;">비밀번호</th>
+					<th style="width:10%;">이름</th>
+					<th style="width:20%;">주소</th>
+					<th style="width:20%;">이메일</th>
+					<th style="width:5%;">추가</th>
+				</tr>
+			</thead>
+			<tbody id="addMemberBody">
+				<tr>
+					<td>
+						<input type="checkbox" class="memberCheck"/>
+					</td>
+					<td>
+						<input type="text" name="memberId" />
+					</td>
+					<td>
+						<input type="text" name="memberPw" />				
+					</td>
+					<td>
+						<input type="text" name="memberName" />
+					</td>
+					<td>
+						<input type="text" name="memberAddr" />
+					</td>
+					<td>
+						<input type="text" name="memberEmail" />
+					</td>
+					<td>
+						<button class="addButton" type="button">추가</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	
+</th:block>
+</html>

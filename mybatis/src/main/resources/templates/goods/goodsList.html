@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="@{layout/default}">
+
+	<th:block layout:fragment="customTitle">
+		<title>회원목록조회</title>
+	</th:block>
+
+	<th:block layout:fragment="customContents">
+		<div th:include="goods/search :: searchFragment"></div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>상품코드</th>
+					<th>상품이름</th>
+					<th>상품가격</th>
+					<th>판매자아이디</th>
+					<th>판매자이름</th>
+					<th>판매자이메일</th>
+					<th>상품등록일자</th>
+					<th>수정</th>
+					<th>삭제</th>
+				<tr>
+			</thead>
+			<tbody>
+				<tr th:if="${#lists.size(goodsList) > 0}" th:each="l : ${goodsList}">
+					<td th:text="${l.goodsCode}"></td>
+					<td th:text="${l.goodsName}"></td>
+					<td th:text="${l.goodsPrice}"></td>
+					<td th:text="${l.goodsSellerId}"></td>
+					<td th:text="${l.member.memberName}"></td>
+					<td th:text="${l.member.memberEmail}"></td>
+					<td th:text="${l.goodsRegDate}"></td>
+					<td>
+						<!-- /modifyMember?memberId=id001&memberPw=pw001 -->
+						<a th:href="@{#}">수정</a>
+					</td>
+					<td>
+						<a th:href="@{#}">삭제</a>					
+					</td>
+				</tr>
+				<tr th:unless="${#lists.size(goodsList) > 0}">
+					<td colspan="9" style="text-align: center;">조회된 내용이 없습니다.</td>
+				</tr>
+			</tbody>
+		</table>
+	</th:block>
+
+</html>

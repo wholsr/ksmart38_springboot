@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<div id="header" th:fragment="headerFragments">
+		상단메뉴 <br>
+		header.html<br><br>
+		<a th:if="${session.SID == NULL or session.SLEVEL == '관리자'}" th:href="@{/addMember}">01.회원가입</a>
+		<a th:if="${session.SLEVEL == '관리자'}" th:href="@{/memberList}">02.회원목록조회</a>
+		<a th:if="${session.SLEVEL == '관리자' or session.SLEVEL eq '판매자'}" th:href="@{/addGoods}">03.상품등록</a>
+		<a th:if="${session.SLEVEL == '관리자'}" th:href="@{/goodsList}">04.상품목록조회</a>		
+		<a th:if="${session.SID == NULL}" th:href="@{/login}">05.로그인</a>		
+		<a th:unless="${session.SID == NULL}" th:href="@{/logout}">06.로그아웃</a>
+		<a th:if="${session.SLEVEL == '관리자'}" th:href="@{/loginHistory}">07.로그인이력</a>
+		<a th:if="${session.SLEVEL == '관리자'}" th:href="@{/addMembers}">08.회원다중등록</a>
+		<br><br>
+		<div th:unless="${session.SID == NULL}" style="text-align: right;">
+			<label >ID : [[${session.SID}]] | [[${session.SNAME}]] 님이 로그인하셨습니다.</label>
+		</div>		
+	</div>
+</html>

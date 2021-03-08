@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ksmart38.mybatis.dao.MemberMapper">
+	<resultMap type="Member" id="memberResultMap">
+		<result property="memberId" 		column="m_id"/>
+		<result property="memberPw" 		column="m_pw"/>
+		<result property="memberName" 		column="m_name"/>
+		<result property="memberLevel" 		column="m_level"/>
+		<result property="memberEmail" 		column="m_email"/>
+		<result property="memberAddr" 		column="m_addr"/>
+		<result property="memberRegDate" 	column="m_reg_date"/>
+	</resultMap>
+	<select id="getLoginHistoryCount" resultType="int">
+		SELECT 
+		    COUNT(1)
+		FROM 
+		   tb_login;
+	</select>
+	
+	<select id="getLoginHistory" parameterType="map" resultType="map">
+		SELECT 
+		    login_num        AS loginNum
+		   ,login_id         AS loginId
+		   ,login_date       AS loginDate
+		   ,logout_date      AS logoutDate
+		FROM 
+		   tb_login
+		LIMIT #{startNum}, #{rowPerPage};
+	</select>
+	
+	<delete id="removeOrderBySellerId" parameterType="String">
+		DELETE 
+		   o
+		FROM 
+		   tb_goods as g
+		   INNER JOIN 
+		   tb_order as o
+		   ON
+		   g.g_code = o.o_g_code
+		WHERE
+		   g.g_seller_id = #{memberId}
+	</delete>
+	
+	<delete id="removeMember" parameterType="String">
+		DELETE
+		FROM
+			tb_member
+		WHERE
+			m_id = #{memberId}
+	</delete>
+	<delete id="removeOrder" parameterType="String">
+		DELETE
+		FROM
+			tb_order
+		WHERE
+			o_id = #{memberId}
+	</delete>
+	<delete id="removeGoods" parameterType="String">
+		DELETE
+		FROM
+			tb_goods
+		WHERE
+			g_seller_id = #{memberId}
+	</delete>
+	<delete id="removeLogin" parameterType="String">
+		DELETE
+		FROM
+			tb_login
+		WHERE
+			login_id = #{memberId}
+	</delete>
+	
+	<update id="modifyMember" parameterType="Member">
+		UPDATE tb_member
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="memberPw != null and memberPw != ''.toString()">
+				m_pw 	= #{memberPw},
+			</if>
+			<if test="memberLevel != null and memberLevel != ''.toString()">
+				m_level = #{memberLevel},
+			</if>
+			<if test="memberName != null and memberName != ''.toString()">
+				m_name 	= #{memberName},
+			</if>
+			<if test="memberAddr != null and memberAddr != ''.toString()">
+				m_addr 	= #{memberAddr},
+			</if>
+			<if test="memberEmail != null and memberEmail != ''.toString()">
+				m_email = #{memberEmail},
+			</if>
+		</trim>
+		WHERE
+			m_id = #{memberId}
+	</update>
+	
+	
+	
+	<select id="getMemberInfoById" parameterType="String" resultMap="memberResultMap">
+		SELECT 
+		    m_id          
+		   ,m_pw          
+		   ,m_name        
+		   ,m_level       
+		   ,m_email       
+		   ,m_addr        
+		   ,m_reg_date    
+		FROM
+		   tb_member
+		WHERE
+		   m_id = #{memberId};
+	</select>
+	
+	<insert id="addMember" parameterType="Member">
+		INSERT INTO tb_member
+		( m_id
+		 ,m_pw
+		 ,m_name
+		 ,m_level
+		 ,m_email
+		 ,m_addr
+		 ,m_reg_date
+		) VALUES (
+		  #{memberId} 
+		 ,#{memberPw}
+		 ,#{memberName}
+		 ,#{memberLevel}
+		 ,#{memberEmail}
+		 ,#{memberAddr}
+		 , NOW()
+		);
+	</insert>
+	
+	<select id="getMemberList" resultMap="memberResultMap" parameterType="map">
+		SELECT 
+		    m_id          
+		   ,m_pw          
+		   ,m_name        
+		   ,m_level       
+		   ,m_email       
+		   ,m_addr        
+		   ,m_reg_date    
+		FROM
+		   tb_member AS m
+		   INNER JOIN 
+		   tb_member_level as l
+		   ON
+		   m.m_level = l.level_num
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="searchKey != null and searchKey != ''.toString()">
+				<choose>
+					<when test="'m_level'.equals(searchKey)">					
+						l.level_name LIKE CONCAT('%',#{searchValue},'%')					
+					</when>
+					<otherwise>
+						${searchKey} LIKE CONCAT('%',#{searchValue},'%')					
+					</otherwise>
+				</choose>
+			</if>
+		</trim> 
+		   
+	</select>
+
+</mapper>
